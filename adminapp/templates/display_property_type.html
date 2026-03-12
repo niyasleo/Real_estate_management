@@ -1,0 +1,119 @@
+{% extends 'dashboard.html' %}
+{% block content %}
+
+<style>
+    /* Content Container */
+    .content-wrapper {
+        background: #f4f5f7; /* Very light gray background to make white cards pop */
+        padding: 2rem;
+    }
+
+    /* Table Header Styling */
+    .table-container {
+        background: transparent;
+        border: none;
+    }
+
+    .custom-thead {
+        background-color: #343a40; /* Dark header like your reference */
+        color: #ffffff;
+    }
+
+    .custom-thead th {
+        border: none;
+        padding: 20px;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+    }
+
+    /* Elevated Row Styling */
+    .elevated-row {
+        background-color: #ffffff;
+        margin-bottom: 10px; /* Spacing between "cards" */
+        box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+        border-radius: 4px;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .elevated-row:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .elevated-row td {
+        padding: 20px;
+        border: none !important;
+        vertical-align: middle;
+        color: #4a5568;
+    }
+
+    /* ID/Primary Column Boldness */
+    .text-bold {
+        font-weight: 700;
+        color: #1a202c;
+    }
+
+    /* Modern Delete Action */
+    .btn-delete-icon {
+        color: #ff8a8a;
+        font-size: 1.2rem;
+        text-decoration: none;
+        transition: 0.2s;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+    }
+
+    .btn-delete-icon:hover {
+        color: #fc424a;
+        background-color: #fff5f5;
+    }
+
+    /* Fixing Table Spacing for Card Look */
+    .table {
+        border-collapse: separate;
+        border-spacing: 0 10px; /* This creates the gap between rows */
+    }
+</style>
+
+<div class="col-lg-12 grid-margin stretch-card">
+  <div class="card table-container">
+    <div class="card-body">
+
+      <div class="table-responsive">
+        <table class="table">
+          <thead class="custom-thead">
+            <tr>
+              <th style="border-top-left-radius: 8px;">Property Type</th>
+              <th class="text-end" style="border-top-right-radius: 8px; text-align: right;">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for i in data %}
+            <tr class="elevated-row">
+              <td class="text-bold">
+                {{ i.property_types }}
+              </td>
+
+              <td class="text-end" style="text-align: right;">
+                <a href="{% url 'delete_property_type' i.id %}"
+                   class="btn-delete-icon"
+                  >
+                   <i class="mdi mdi-close-circle-outline"></i> <span>&times;</span> </a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

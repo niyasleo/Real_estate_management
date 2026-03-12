@@ -1,0 +1,79 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="row">
+        <div class="col-12 grid-margin stretch-card">
+            <div class="card" style="background-color: #ffffff; border-radius: 15px; border: none; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <h4 class="card-title" style="color: #2c3e50; font-weight: 700; margin-bottom: 5px;">Contact Submissions</h4>
+                            <p class="card-description mb-0">Overview of all messages received via the Contact Us page.</p>
+                        </div>
+                        <span class="badge badge-info" style="background-color: #2ecc71; color: white;">Total: {{ contact_data|length }}</span>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover" style="border-collapse: separate; border-spacing: 0 10px;">
+                            <thead>
+                                <tr style="background-color: #f8f9fa;">
+                                    <th style="border: none; color: #888; font-size: 0.8rem; text-transform: uppercase; padding: 15px;">Name</th>
+                                    <th style="border: none; color: #888; font-size: 0.8rem; text-transform: uppercase;">Email</th>
+                                    <th style="border: none; color: #888; font-size: 0.8rem; text-transform: uppercase;">User Role</th>
+                                    <th style="border: none; color: #888; font-size: 0.8rem; text-transform: uppercase;">Subject</th>
+                                    <th style="border: none; color: #888; font-size: 0.8rem; text-transform: uppercase;">Message Snippet</th>
+                                    <th style="border: none; color: #888; font-size: 0.8rem; text-transform: uppercase; text-align: center;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for contact in contact_data %}
+                                <tr style="background-color: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.02);">
+                                    <td style="font-weight: 600; vertical-align: middle; padding: 15px;">{{ contact.full_name }}</td>
+
+                                    <td style="vertical-align: middle;">{{ contact.email }}</td>
+
+                                    <td style="vertical-align: middle;">
+                                        <span class="badge" style="background-color: #e8f5e9; color: #2ecc71; font-weight: 600; padding: 5px 10px; border-radius: 4px;">
+                                            {{ contact.role|title }}
+                                        </span>
+                                    </td>
+
+                                    <td style="vertical-align: middle; font-weight: 500;">{{ contact.subject }}</td>
+
+                                    <td style="vertical-align: middle; color: #666;">
+                                        {{ contact.message }}
+                                    </td>
+
+                                    <td style="text-align: center; vertical-align: middle;">
+                                        <button class="btn btn-sm"
+                                                style="background-color: transparent; color: #2ecc71; border: 1px solid #2ecc71; font-size: 0.75rem; font-weight: 600; padding: 5px 15px; text-transform: uppercase; border-radius: 4px; transition: 0.3s;"
+                                                onmouseover="this.style.backgroundColor='#2ecc71'; this.style.color='white';"
+                                                onmouseout="this.style.backgroundColor='transparent'; this.style.color='#2ecc71';">
+                                            View
+                                        </button><a class="btn btn-sm" href="{% url 'delete_msg' contact.id %}"
+                                                style="background-color: transparent; color: #2ecc71; border: 1px solid #2ecc71; font-size: 0.75rem; font-weight: 600; padding: 5px 15px; text-transform: uppercase; border-radius: 4px; transition: 0.3s;"
+                                                onmouseover="this.style.backgroundColor='#2ecc71'; this.style.color='white';"
+                                                onmouseout="this.style.backgroundColor='transparent'; this.style.color='#2ecc71';">
+                                            Delete
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center" style="padding: 50px; color: #999;">
+                                        <i class="mdi mdi-email-outline d-block mb-2" style="font-size: 2rem;"></i>
+                                        No contact messages have been submitted yet.
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

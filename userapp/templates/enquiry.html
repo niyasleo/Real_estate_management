@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enquiries | Agent Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Poppins", sans-serif; }
+        body { background-color: #f8fbf9; color: #1a1a1a; padding-bottom: 50px; }
+
+        /* Navbar & Dropdown Fixes */
+        .navbar-custom {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 60px; background-color: #fff; border-bottom: 1px solid #eee;
+            position: sticky; top: 0; z-index: 10000;
+        }
+        .logo { font-size: 24px; font-weight: 700; text-decoration: none; color: #1a1a1a; }
+        .logo span { color: #2ecc71; }
+        .nav-links a { margin-left: 25px; text-decoration: none; color: #333; font-weight: 500; position: relative; transition: 0.3s; }
+        .nav-links a:hover, .nav-links a.active { color: #2ecc71; }
+
+        /* Dropdown Bridge Fix */
+        .user-dropdown { position: relative; display: inline-block; margin-left: 25px;
+        
+    margin-left: -10px;
+
+        }
+        .user-dropdown::after { content: ""; position: absolute; top: 100%; left: 0; width: 100%; height: 15px; display: block; }
+        .dropdown-content {
+            display: none; position: absolute; right: 0; top: 100%; background: #fff;
+            min-width: 160px; box-shadow: 0 8px 16px rgba(0,0,0,0.1); z-index: 1000;
+            border-radius: 8px; border: 1px solid #eee; overflow: hidden; margin-top: 10px;
+        }
+        .dropdown-content a { color: #333; padding: 12px 16px; display: block; font-size: 14px; text-decoration: none; margin-left: 0 !important; }
+        .dropdown-content a:hover { background: #f8f9fa; color: #2ecc71; }
+        .user-dropdown:hover .dropdown-content { display: block; }
+
+        /* Enquiry Components */
+        .card-custom { background: white; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); overflow: hidden; }
+        .table thead th { background-color: #fafafa; color: #aaa; font-size: 0.75rem; text-transform: uppercase; padding: 20px; border: none; }
+        .table tbody td { padding: 20px; border-bottom: 1px solid #f8f8f8; }
+
+        /* Buttons */
+        .btn-action { border-radius: 8px; font-weight: 600; font-size: 0.85rem; padding: 8px 16px; transition: 0.3s; border: none; }
+        .btn-view { background: #1a1a1a; color: #fff; }
+        .btn-whatsapp { background: #25D366; color: #fff; }
+        .btn-whatsapp:hover { background: #128C7E; color: #fff; }
+
+        /* Modal Details */
+        .detail-label { font-size: 0.75rem; color: #aaa; text-transform: uppercase; font-weight: 600; }
+        .detail-value { font-size: 1rem; color: #1a1a1a; margin-bottom: 15px; font-weight: 500; }
+@media print {
+    /* Hide the entire website dashboard */
+    body * {
+        visibility: hidden;
+    }
+
+    /* Show only the modal content */
+    #leadModal, #leadModal * {
+        visibility: visible;
+    }
+
+    #leadModal {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: white !important;
+        padding: 40px;
+    }
+
+    .modal-content {
+        border: none !important;
+        box-shadow: none !important;
+        text-align: left !important; /* Force left alignment like the image */
+    }
+
+    /* Section Headings (NAME, PHONE, etc.) */
+    .detail-label {
+        font-size: 0.9rem !important;
+        color: #666 !important;
+        text-transform: uppercase;
+        font-weight: 700;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    /* Values (Abhishek Pandey, etc.) */
+    .detail-value {
+        font-size: 1.5rem !important;
+        color: #000 !important;
+        font-weight: 600;
+        margin-bottom: 25px !important; /* Space between rows */
+        border-bottom: 1px solid #eee; /* Light line under each value */
+        padding-bottom: 5px;
+    }
+
+    /* Enquiry Message styling */
+    #m-message {
+        font-size: 1.2rem !important;
+        line-height: 1.6;
+        color: #333 !important;
+        margin-top: 10px;
+    }
+
+    /* Hide buttons and close icons */
+    .btn, .btn-close, .modal-header h5, .modal-footer {
+        display: none !important;
+    }
+}
+    </style>
+</head>
+<body>
+<nav class="navbar-custom">
+
+
+    <a style="text-decoration:none;" href="{% url 'agent_home' %}">
+        <div style="letter-spacing:1px;" class="logo" >Urban<span style="letter-spacing:1  px;" >Axis</span></div></a>
+
+    <div class="nav-links">
+        <a href="{% url 'agent_home' %}">Home</a>
+        <a href="{% url 'enquiry' %}" class="active">Enquiries</a>
+        <a href="{% url 'listed_properties' %}">Properties</a>
+
+        {% if request.session.username %}
+        <div class="user-dropdown">
+            <a href="javascript:void(0);">
+                {{ request.session.username }} ▾
+            </a>
+            <div class="dropdown-content">
+                <a href="{% url 'logout_view' %}" style="color:#e74c3c;">
+                    Logout
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</nav>
+
+<div class="container mt-5">
+
+    <div class="card-custom">
+        <div class="table-responsive">
+            <table class="table m-0">
+                <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Property</th>
+                        <th>Received On</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for i in data %}
+                    <tr>
+                        <td>
+                            <div class="fw-bold">{{i.name}}</div>
+                            <div class="small text-muted">{{i.phone}}</div>
+                        </td>
+                        <td>{{i.property_title}} (ID: {{i.property_id}})</td>
+                        <td>{{i.created_at}}</td>
+                        <td class="text-center">
+                            <div class="d-flex justify-content-center gap-2">
+                                <button class="btn-action btn-view"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#leadModal"
+                                    onclick="setModalData('{{i.name}}',  '{{i.phone}}', '{{i.property_title}}', '{{i.property_id}}', '{{i.message}}')">
+                                    Details
+                                </button>
+                                <a href="https://wa.me/{{i.phone}}" target="_blank" class="btn-action btn-whatsapp text-decoration-none">WhatsApp</a>
+                            </div>
+                        </td>
+                    </tr>{%endfor%}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+    <div class="modal fade" id="leadModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 p-4">
+            <div class="modal-header border-0">
+                <h5 class="fw-bold">Lead Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="print-form-grid">
+                    <div class="form-item">
+                        <span class="detail-label">Customer Name</span>
+                        <div class="detail-value" id="m-name"></div>
+                    </div>
+                    <div class="form-item">
+                        <span class="detail-label">Contact Number</span>
+                        <div class="detail-value" id="m-phone"></div>
+                    </div>
+                    <div class="form-item">
+                        <span class="detail-label">Property Reference</span>
+                        <div class="detail-value" id="m-property"></div>
+                    </div>
+
+                    <div class="print-message-box">
+                        <span class="detail-label">Enquiry Message</span>
+                        <div id="m-message">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer border-0 justify-content-center">
+                <button class="btn btn-dark px-5 py-3 fw-bold rounded-pill" onclick="window.print()">
+                    Download (PDF)
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    function setModalData(name, phone, prop, id, msg) {
+        document.getElementById('m-name').innerText = name;
+        document.getElementById('m-phone').innerText = "+91 " + phone;
+        document.getElementById('m-property').innerText = prop + " (ID: " + id + ")";
+        document.getElementById('m-message').innerText = msg;
+
+        // Update WhatsApp link inside modal
+        document.getElementById('m-wa-link').onclick = function() {
+            window.open("https://wa.me/91" + phone, "_blank");
+        };
+    }
+</script>
+
+</body>
+</html>

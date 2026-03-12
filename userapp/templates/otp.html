@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <title>Verify Identity | Premium Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<style>
+    :root {
+        --bg-color: #334155;
+        --card-bg: #f1f5f9;
+        --accent-navy: #1e293b;
+        --input-border: #cbd5e1;
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+    }
+
+    body {
+        margin: 0;
+        padding: 20px; /* Added padding for mobile safety */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        font-family: 'Jost', sans-serif;
+        background: linear-gradient(135deg, #334155 0%, #475569 100%);
+        box-sizing: border-box;
+    }
+
+    .main {
+        width: 100%;
+        max-width: 420px; /* Slightly wider to accommodate gaps comfortably */
+        background: var(--card-bg);
+        padding: 40px 30px; /* Adjusted padding */
+        border-radius: 20px;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-sizing: border-box; /* Crucial: ensures padding doesn't add to width */
+        text-align: center;
+        animation: slideUp 0.5s ease-out;
+    }
+
+    .otp-icon {
+        width: 60px;
+        height: 60px;
+        background: #e2e8f0;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+    }
+
+    .otp-icon svg {
+        width: 30px;
+        color: var(--accent-navy);
+    }
+
+    h2 {
+        color: var(--text-main);
+        font-size: 1.8rem;
+        margin-bottom: 10px;
+        font-weight: 600;
+    }
+
+    .subtitle {
+        color: var(--text-muted);
+        margin-bottom: 30px;
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    .otp-container {
+        display: flex;
+        justify-content: center; /* Center them */
+        gap: 8px; /* Slightly reduced gap */
+        margin-bottom: 30px;
+        width: 100%; /* Ensure container fills the main div */
+    }
+
+    .otp-input {
+        /* Using flex-basis ensures they fit perfectly even if screen is narrow */
+        flex: 1;
+        max-width: 50px;
+        height: 60px;
+        text-align: center;
+        font-size: 1.5rem;
+        font-weight: 700;
+        background: #ffffff;
+        border: 1.5px solid var(--input-border);
+        border-radius: 12px;
+        color: var(--text-main);
+        transition: all 0.2s ease;
+        box-sizing: border-box; /* Ensures border/padding stays inside the 50px */
+        padding: 0; /* Remove internal padding that might push width */
+    }
+
+    .otp-input:focus {
+        outline: none;
+        border-color: var(--bg-color);
+        box-shadow: 0 0 0 3px rgba(51, 65, 85, 0.1);
+    }
+
+    button {
+        width: 100%;
+        padding: 15px;
+        background: var(--accent-navy);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    button:hover {
+        background: #0f172a;
+        transform: translateY(-1px);
+    }
+
+    .resend-text {
+        margin-top: 25px;
+        font-size: 0.9rem;
+        color: var(--text-muted);
+    }
+
+    .resend-text a {
+        color: var(--bg-color);
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Small screen adjustment */
+    @media (max-width: 400px) {
+        .otp-container { gap: 5px; }
+        .otp-input { height: 50px; font-size: 1.2rem; }
+        .main { padding: 30px 20px; }
+    }
+    /* Updated Single OTP Design */
+    .single-otp-container {
+        margin-bottom: 30px;
+        width: 100%;
+        position: relative;
+    }
+
+    .single-otp-input {
+        width: 100%;
+        height: 70px;
+        text-align: center;
+        font-size: 2.2rem;
+        font-weight: 700;
+        /* Balanced spacing for 6 digits */
+        letter-spacing: 15px;
+        padding-left: 15px; /* Centers the text properly with letter-spacing */
+        background: #ffffff;
+        border: 2px solid var(--input-border);
+        border-radius: 16px;
+        color: var(--text-main);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-sizing: border-box;
+    }
+
+    .single-otp-input:focus {
+        outline: none;
+        border-color: var(--accent-navy);
+        box-shadow: 0 0 0 4px rgba(30, 41, 59, 0.1);
+        background-image: linear-gradient(to right, var(--accent-navy) 1px, transparent 1px);
+    }
+
+    .single-otp-input::placeholder {
+        color: var(--text-muted);
+        letter-spacing: 10px;
+        opacity: 0.3;
+    }
+
+    /* Animation for the button */
+    button:active {
+        transform: scale(0.98);
+    }
+</style>
+
+<div class="main">
+    <div class="otp-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+        </svg>
+    </div>
+
+    <div class="otp-content">
+        <form method="post" action="{% url 'login_otp_verify' %}">
+            {% csrf_token %}
+            <input type="hidden" name="mobile" value="{{ mobile }}">
+
+            <h2>Verify It's You</h2>
+            <p class="subtitle">Enter the 6-digit code sent to your phone.</p>
+
+            <div class="single-otp-container">
+                <input type="text"
+                       class="single-otp-input"
+                       name="otp"
+                       maxlength="6"
+                       required
+                       pattern="\d{6}"
+                       inputmode="numeric"
+                       placeholder="· · · · · ·"
+                       autofocus>
+            </div>
+
+            <button type="submit">Verify Account</button>
+        </form>
+
+        <div class="resend-text">
+            Didn't receive the code? <a href="#">Resend Code</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    const inputs = document.querySelectorAll('.otp-input');
+    inputs.forEach((input, index) => {
+        input.addEventListener('input', (e) => {
+            if (e.target.value.length === 1 && index < inputs.length - 1) {
+                inputs[index + 1].focus();
+            }
+        });
+
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                inputs[index - 1].focus();
+            }
+        });
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    {% if messages%}
+            {% for i in messages %}
+                {% if i.tags == 'success'%}
+                <script>swal('{{i}}','','success')</script>
+                {% elif i.tags == 'warning'%}
+                <script>swal('{{i}}','','warning')</script>
+                {% elif i.tags == 'info'%}
+                <script>swal('{{i}}','','info')</script>
+                {% elif i.tags == 'error'%}
+                <script>swal('{{i}}','','error')</script>
+                {% endif%}
+            {% endfor %}
+    {% endif %}
+</body>
+</html>

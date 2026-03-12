@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+{% extends 'dashboard.html' %}
+{% block content%}
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<style>
+    label{
+    color:black;
+    }
+    button{
+    margin-top:10px;}
+</style>
+<div class="col-12 grid-margin stretch-card" >
+                <div class="card" style="background-color:cream;">
+                  <div class="card-body">
+                        <p class="card-description"> </p>
+                    <form class="forms-sample" method="post" action="{% url 'add_property_type' %}" >
+                     {% csrf_token %}
+                      <div class="form-group">
+                        <label for="exampleInputName1">Property Type</label>
+                        <input type="text" class="form-control" name="property" id="exampleInputName1" placeholder="Property Type ">
+
+                      </div>
+
+
+                      <button type="submit" class="btn btn-primary mr-2">Submit</button>
+
+                    </form>
+                  </div>
+                </div>
+              </div>
+</body>
+</html>
+{% endblock %}

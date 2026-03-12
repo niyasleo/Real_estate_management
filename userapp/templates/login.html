@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <title>Login | Premium Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<style>
+    :root {
+        /* The "Middle Ground" Palette */
+        --bg-color: #334155;      /* Muted Slate Blue */
+        --card-bg: #f1f5f9;      /* Soft Light Gray (Off-white) */
+        --accent-navy: #1e293b;  /* Professional Navy */
+        --input-border: #cbd5e1;
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --link-color: #334155;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        font-family: 'Jost', sans-serif;
+        background: linear-gradient(135deg, #334155 0%, #475569 100%);
+    }
+
+    .main {
+        width: 100%;
+        max-width: 380px;
+        background: var(--card-bg);
+        padding: 50px 40px;
+        border-radius: 20px;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-sizing: border-box;
+        animation: slideUp 0.5s ease-out;
+    }
+
+    .login label {
+        color: var(--text-main);
+        font-size: 2rem;
+        text-align: center;
+        display: block;
+        margin-bottom: 10px;
+        font-weight: 600;
+        letter-spacing: -0.5px;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: var(--text-muted);
+        margin-bottom: 35px;
+        font-size: 0.95rem;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    input {
+        width: 100%;
+        padding: 14px 18px;
+        background: #ffffff;
+        border: 1.5px solid var(--input-border);
+        border-radius: 10px;
+        color: var(--text-main);
+        font-family: 'Jost', sans-serif;
+        font-size: 15px;
+        box-sizing: border-box;
+        transition: all 0.2s ease;
+    }
+
+    input::placeholder {
+        color: #94a3b8;
+    }
+
+    input:focus {
+        outline: none;
+        border-color: var(--bg-color);
+        box-shadow: 0 0 0 3px rgba(51, 65, 85, 0.1);
+    }
+
+    button {
+        width: 100%;
+        padding: 15px;
+        margin-top: 10px;
+        background: var(--accent-navy);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    button:hover {
+        background: #0f172a;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    button:active {
+        transform: translateY(0);
+    }
+
+    .footer-text {
+        text-align: center;
+        margin-top: 30px;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+    }
+
+    .footer-text a {
+        color: var(--link-color);
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.2s;
+    }
+
+    .footer-text a:hover {
+        text-decoration: underline;
+    }
+
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+
+<div class="main">
+    <div class="login">
+        <form method="post" action="{% url 'login_view' %}">
+            {% csrf_token %}
+            <label>Login</label>
+            <p class="subtitle">Welcome back! Please enter your details.</p>
+
+            <div class="form-group">
+                <input type="tel" name="mobile" placeholder="Enter your mobile" required>
+            </div>
+
+            <div class="form-group">
+                <input type="password" name="pswd" placeholder="Enter your Password" required>
+            </div>
+
+            <button type="submit">Sign In</button>
+        </form>
+
+        <div class="footer-text">
+            Don't have an account? <a href="{% url 'register' %}">Sign up here</a>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% if messages %}
+    <script>
+        {% for i in messages %}
+            Swal.fire({
+                icon: "{% if i.tags == 'error' %}error{% elif i.tags == 'success' %}success{% else %}info{% endif %}",
+                title: "{{ i }}",
+                confirmButtonColor: '#1e293b'
+            });
+        {% endfor %}
+    </script>
+{% endif %}
+</body>
+</html>
